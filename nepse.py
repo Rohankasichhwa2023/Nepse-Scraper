@@ -41,7 +41,7 @@ search_button.click()
 
 # Wait until table element is present and rows are loaded
 wait.until(EC.presence_of_element_located((By.ID, "myTable")))
-# wait until at least one row is present
+# Wait until all table rows are present (at least one row exists)
 wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#myTable tbody tr")))
 
 # --- Ensure we are on page 1 of pagination ---
