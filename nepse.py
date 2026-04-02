@@ -15,12 +15,12 @@ def setup_driver():
     if HEADLESS:
         options.add_argument("--headless=new")
     options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox") # for linux/container to prevent chrome crashes
+    options.add_argument("--disable-dev-shm-usage") #Disable /dev/shm usage to prevent Chrome crashes in limited-memory environments
     options.add_argument("--start-maximized")
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--log-level=3")
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    options.add_argument("--log-level=3") #suppress most of the logs
+    options.add_experimental_option("excludeSwitches", ["enable-logging"]) #Remove the "Chrome is being controlled by automated test software" message
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
@@ -41,14 +41,14 @@ search_button.click()
 
 # Wait until table element is present and rows are loaded
 wait.until(EC.presence_of_element_located((By.ID, "myTable")))
-# wait until at least one row is present
+# Wait until all table rows are present (at least one row exists)
 wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#myTable tbody tr")))
 
 # --- Ensure we are on page 1 of pagination ---
 def ensure_page_one():
     try:
         # locate the active pagination button
-        active = driver.find_element(By.CSS_SELECTOR, "#myTable_paginate .paginate_button.active")
+        active = driver.find_element(By.CSS_SELECTOR, "#myTable_paginate .paginate_button.active") # or .current
         if active.text.strip() != "1":
             # find the button with text '1' and click it
             buttons = driver.find_elements(By.CSS_SELECTOR, "#myTable_paginate .paginate_button")
