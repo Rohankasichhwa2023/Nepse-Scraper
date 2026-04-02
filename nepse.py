@@ -44,6 +44,11 @@ wait.until(EC.presence_of_element_located((By.ID, "myTable")))
 # Wait until all table rows are present (at least one row exists)
 wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#myTable tbody tr")))
 
+# due to ellipsis (… ) between page 5 and 163
+driver.execute_script("$('#myTable').DataTable().page.len(50).draw();")
+time.sleep(0.5)
+wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#myTable tbody tr")))
+
 # --- Ensure we are on page 1 of pagination ---
 def ensure_page_one():
     try:
