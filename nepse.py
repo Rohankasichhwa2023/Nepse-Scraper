@@ -29,13 +29,13 @@ driver = setup_driver()
 driver.get("https://www.sharesansar.com/index-history-data")
 wait = WebDriverWait(driver, 15)
 
-# --- Step 1: Set "From Date" ---
+# Set "From Date" 
 from_date_input = wait.until(EC.presence_of_element_located((By.ID, "fromDate")))
 driver.execute_script("arguments[0].removeAttribute('readonly')", from_date_input)
 from_date_input.clear()
 from_date_input.send_keys("2012-01-01")
 
-# --- Step 2: Click Search button ---
+# Click Search button 
 search_button = driver.find_element(By.ID, "btn_indxhis_submit")
 search_button.click()
 
@@ -44,12 +44,12 @@ wait.until(EC.presence_of_element_located((By.ID, "myTable")))
 # Wait until all table rows are present (at least one row exists)
 wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#myTable tbody tr")))
 
-# due to ellipsis (… ) between page 5 and 163
+
 driver.execute_script("$('#myTable').DataTable().page.len(50).draw();")
 time.sleep(0.5)
 wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#myTable tbody tr")))
 
-# --- Ensure we are on page 1 of pagination ---
+# Ensure we are on page 1 of pagination 
 def ensure_page_one():
     try:
         # locate the active pagination button
@@ -78,7 +78,7 @@ def ensure_page_one():
 
 ensure_page_one()
 
-# --- Step 3: Scrape table with pagination ---
+# Step 3: Scrape table with pagination
 all_data = []
 
 while True:
@@ -112,7 +112,7 @@ while True:
 
 driver.quit()
 
-# --- Save to CSV ---
+# Save to CSV
 with open("nepse.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
     writer.writerow(["S.N.", "Open", "High", "Low", "Close", "Change", "Per Change (%)", "Turnover", "Date"])
